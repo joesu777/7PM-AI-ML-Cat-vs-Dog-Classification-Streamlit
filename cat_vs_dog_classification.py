@@ -28,5 +28,5 @@ if uploaded_file:
     confidence_levels = prediction[2]
     confidence_level = confidence_levels[index]
     confidence_level = confidence_level * 100
-    st.text(f"{prediction[0]} - {confidence_level:.2f}")
+    st.text(f"{prediction[0]} - {confidence_level:.2f}%")
     st.image(uploaded_file)
