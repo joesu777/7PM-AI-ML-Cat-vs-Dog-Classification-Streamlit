@@ -1,8 +1,21 @@
 import streamlit as st
 from fastai.vision.all import *
+import pathlib
+import platform
 
 st.title("Cat vs Dog Classifier")
 st.text("Created by Joel Suwanto")
+
+if platform.system() == "Windows":
+    pathlib.PosixPath = pathlib.WindowsPath
+else:
+    pathlib.WindowsPath = pathlib.PosixPath
+
+def cat_or_dog(file_name):
+    if file_name[0].isupper(): #same as == True
+        return "CAT"
+    else:
+        return "DOG"
 
 cat_vs_dog_model = load_learner("cat_vs_dog_fastai_2_7_19.pkl")
 
@@ -11,3 +24,9 @@ if uploaded_file:
     real_img = PILImage.create(uploaded_file)
     resized_img = real_img.resize((224, 224), Image.NEAREST)
     prediction = cat_vs_dog_model.predict(resized_img)
+    index = prediction[1]
+    confidence_levels = prediction[2]
+    confidence_level = confidence_levels[index]
+    confidence_level = confidence_level * 100
+    st.text(f"{prediction[0]} - {confidence_level:.2f}")
+    st.image(uploaded_file)
